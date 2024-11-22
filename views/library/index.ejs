@@ -18,42 +18,47 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/">Books</a>
+                    <a class="<%=path === '/' ? 'active' : ''%>" href="/">Books</a>
                 </li>
                 <li>
-                    <a href="/cart">Cart</a>
+                    <a class="<%=path === '/cart' ? 'active' : ''%>" href="/cart">Cart</a>
                 </li>
                 <li>
-                    <a href="/reserved">Reserved books</a>
+                    <a class="<%=path === '/reserved' ? 'active' : ''%>" href="/reserved">Reserved books</a>
                 </li>
                 <li>
-                    <a href="/add-book">Add book</a>
+                    <a class="<%=path === '/add-book' ? 'active' : ''%>" href="/add-book">Add book</a>
                 </li>
                 <li>
-                    <a href="/admin">Admin books</a>
+                    <a class="<%=path === '/admin' ? 'active' : ''%>" href="/admin">Admin books</a>
                 </li>
             </ul>
             <ul class="auth_navigation">
                 <li>
-                    <a href="/signup">Sign up</a>
+                    <a class="<%=path === '/signup' ? 'active' : ''%>" href="/signup">Sign up</a>
                 </li>
                 <li>
-                    <a href="/login">Login</a>
+                    <a class="<%=path === '/login' ? 'active' : ''%>" href="/login">Login</a>
                 </li>
                 <li>
-                    <a href="/logout">Logout</a>
+                    <a class="<%=path === '/logout' ? 'active' : ''%>" href="/logout">Logout</a>
                 </li>
             </ul>
         </nav>
     </header>
     <div class="books">
-        <ul>
-            <%for (const book of books) {%>
-            <li class="book">
-                <%=book%>
-            </li>
-            <%}%>
-        </ul>
+
+        <% for (const book of books) { %>
+            <article class="book_item">
+                <div class="book">
+                    <h1><%= book.title %></h1>
+                    <h3><%= book.author %></h3>
+                    <img src="<%= book.imageUrl %>" alt="A book">
+                    <p><%= book.description %></p>
+                    <button class="btn" type="submit">Reserve</button>
+                </div>
+            </article>
+        <% } %>
     </div>
     <footer class="main_footer">
         <ul class="links">
