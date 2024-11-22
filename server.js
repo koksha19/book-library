@@ -4,6 +4,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const connectDb = require("./config/connectDb");
 const libraryRoutes = require("./routes/mainPage");
+const adminRoutes = require("./routes/admin");
 
 const PORT = process.env.PORT || 3000;
 
@@ -19,12 +20,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(libraryRoutes);
+app.use("/admin", adminRoutes);
 
-mongoose.connection.once('open', () => {
+mongoose.connection.once("open", () => {
   console.log("Connected to the database");
   app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);
   });
-})
-
-
+});
