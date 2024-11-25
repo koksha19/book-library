@@ -79,7 +79,7 @@ a:hover {
 
 .book {
     width: 270px;
-    height: 470px;
+    height: 500px;
     box-shadow: 5px 5px 5px 5px #656464;
     text-align: center;
 }
@@ -97,11 +97,10 @@ a:hover {
 .btn {
     margin: 0.5rem;
     font-family: inherit;
+    font-size: 1.2rem;
     background-color: #696bea;
-    height: 2rem;
+    height: 2.7rem;
     width: 90%;
     border-radius: 5px;
     color: white;
 }
-
-

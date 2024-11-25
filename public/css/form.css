@@ -1,0 +1,27 @@
+.add_book {
+    margin: 2rem;
+    box-shadow: 5px 5px 5px 5px #656464;
+    width: 30%;
+    text-align: center;
+    justify-self: center;
+}
+
+.form * {
+    margin: 0.5rem;
+}
+
+.form div {
+    display: grid;
+}
+
+.form div label {
+    margin-left: 1rem;
+    justify-self: start;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.form div input {
+    height: 2rem;
+    font-size: 1rem;
+}

@@ -1,8 +1,21 @@
 const Book = require("../models/Book");
 
-const createBook = async (req, res) => {
+const getAdminBooks = async (req, res) => {
+    const books = await Book.find();
+    res.render("admin/admin-books", {
+        path: "/admin/books",
+        books: books,
+    });
+};
+
+const getCreateBook = async (req, res) => {
+    res.render("admin/add-book", {
+        path: "/admin/add-book",
+    });
+}
+
+const postCreateBook = async (req, res) => {
   const { title, author, imageUrl, description } = req.body;
-  const books = await Book.find();
 
   try {
     await Book.create({
@@ -11,22 +24,16 @@ const createBook = async (req, res) => {
       imageUrl: imageUrl,
       description: description,
     });
+
+    const books = await Book.find();
+
     res.render("admin/admin-books", {
-      admin: true,
       path: "/books",
       books: books,
     });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
-};
-
-const getAdminBooks = async (req, res) => {
-  const books = await Book.find();
-  res.render("admin/admin-books", {
-    path: "/admin/books",
-    books: books,
-  });
 };
 
 const deleteBook = async (req, res) => {
@@ -49,4 +56,4 @@ const deleteBook = async (req, res) => {
       });
 }
 
-module.exports = { createBook, getAdminBooks, deleteBook };
+module.exports = { getAdminBooks, getCreateBook, postCreateBook, deleteBook };
