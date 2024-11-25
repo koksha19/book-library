@@ -47,7 +47,6 @@
         </nav>
     </header>
     <div class="books">
-
         <% for (const book of books) { %>
             <article class="book_item">
                 <div class="book">
@@ -55,7 +54,13 @@
                     <h3><%= book.author %></h3>
                     <img src="<%= book.imageUrl %>" alt="A book">
                     <p><%= book.description %></p>
-                    <button class="btn" type="submit">Reserve</button>
+                    <form action="/">
+                        <button <% if (admin) { %> hidden <% } %> class="btn" type="submit">Reserve</button>
+                    </form>
+                    <form action="/admin/delete-book" method="post">
+                        <input type="hidden" value="<%= book._id %>" name="bookId">
+                        <button <% if (!admin) { %> hidden <% } %> class="btn" type="submit" style="background: red">Delete</button>
+                    </form>
                 </div>
             </article>
         <% } %>

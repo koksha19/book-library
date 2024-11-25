@@ -67,8 +67,10 @@ a:hover {
 }
 
 .books {
-    margin: 0 2rem 0 2rem;
+    margin: 0 2rem 5rem 2rem;
     display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .book_item {
@@ -78,7 +80,7 @@ a:hover {
 .book {
     width: 270px;
     height: 470px;
-    box-shadow: 5px 5px 5px 5px #484444;
+    box-shadow: 5px 5px 5px 5px #656464;
     text-align: center;
 }
 

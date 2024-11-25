@@ -3,8 +3,8 @@ const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const connectDb = require("./config/connectDb");
-const libraryRoutes = require("./routes/mainPage");
-const adminRoutes = require("./routes/admin");
+const libraryRoutes = require("./routes/mainRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 
 const PORT = process.env.PORT || 3000;
 
