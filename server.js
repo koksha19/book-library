@@ -3,6 +3,9 @@ const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const multer = require("multer");
+const cookieParser = require("cookie-parser");
+const flash = require("connect-flash");
+const session = require("express-session");
 const connectDb = require("./config/connectDb");
 const libraryRoutes = require("./routes/mainRoutes");
 const adminRoutes = require("./routes/adminRoutes");
@@ -26,6 +29,7 @@ const storage = multer.diskStorage({
   },
 });
 
+//app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(multer({ storage: storage }).single("imageUrl"));
@@ -34,6 +38,15 @@ app.use(
   "/public/images",
   express.static(path.join(__dirname, "public", "images")),
 );
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 1000 * 60 * 60 * 24 },
+  }),
+);
+app.use(flash());
 
 app.use(libraryRoutes);
 app.use("/admin", adminRoutes);

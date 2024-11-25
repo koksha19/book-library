@@ -29,3 +29,17 @@
 input[type="file"] {
     margin-left: 2rem;
 }
+
+#flash {
+    margin: 1rem;
+    justify-self: center;
+    width: 40%;
+    height: 3rem;
+    box-shadow: 3px 3px 3px 3px #656464;
+    background-color: #ec5151;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    display: none;
+    justify-content: center;
+}

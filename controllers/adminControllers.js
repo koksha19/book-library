@@ -12,12 +12,28 @@ const getAdminBooks = async (req, res) => {
 const getCreateBook = async (req, res) => {
   return res.render("admin/add-book", {
     path: "/admin/add-book",
+    title: null,
+    author: null,
+    description: null,
+    errors: null,
   });
 };
 
 const postCreateBook = async (req, res) => {
   const { title, author, description } = req.body;
   const image = req.file;
+  console.log(image);
+
+  if (!title || !author || !description || !image) {
+    req.flash("error", "Please, fill in all fields");
+    return res.render("admin/add-book", {
+      path: "/admin/add-book",
+      title: title,
+      author: author,
+      description: description,
+      errors: req.flash("error"),
+    });
+  }
 
   try {
     const imageUrl = image.path;
