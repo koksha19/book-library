@@ -37,7 +37,6 @@ app.use(
 
 app.use(libraryRoutes);
 app.use("/admin", adminRoutes);
-app.use(adminRoutes);
 app.use(pageNotFound);
 
 mongoose.connection.once("open", () => {
