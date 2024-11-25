@@ -1,51 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Library</title>
-    <link rel="stylesheet" href="/css/main.css">
-</head>
-<body>
-    <header class="main_header">
-        <nav class="navigation">
-            <ul class="main_navigation">
-                <li>
-                    <a href="/">
-                        <img id="logo" src="/images/logo.png" alt="Logo">
-                    </a>
-                </li>
-                <li>
-                    <a class="<%=path === '/' ? 'active' : ''%>" href="/">Books</a>
-                </li>
-                <li>
-                    <a class="<%=path === '/cart' ? 'active' : ''%>" href="/cart">Cart</a>
-                </li>
-                <li>
-                    <a class="<%=path === '/reserved' ? 'active' : ''%>" href="/reserved">Reserved books</a>
-                </li>
-                <li>
-                    <a class="<%=path === '/add-book' ? 'active' : ''%>" href="/admin/add-book">Add book</a>
-                </li>
-                <li>
-                    <a class="<%=path === '/admin' ? 'active' : ''%>" href="/admin/books">Admin books</a>
-                </li>
-            </ul>
-            <ul class="auth_navigation">
-                <li>
-                    <a class="<%=path === '/signup' ? 'active' : ''%>" href="/signup">Sign up</a>
-                </li>
-                <li>
-                    <a class="<%=path === '/login' ? 'active' : ''%>" href="/login">Login</a>
-                </li>
-                <li>
-                    <a class="<%=path === '/logout' ? 'active' : ''%>" href="/logout">Logout</a>
-                </li>
-            </ul>
-        </nav>
-    </header>
+<%- include('../includes/head') %>>
+<%- include('../includes/navigation') %>
     <div class="books">
         <% for (const book of books) { %>
             <article class="book_item">
@@ -65,18 +19,4 @@
             </article>
         <% } %>
     </div>
-    <footer class="main_footer">
-        <ul class="links">
-            <li>
-                <a href="https://github.com/koksha19">GitHub</a>
-            </li>
-            <li>
-                <a href="https://www.linkedin.com/in/levbereza/">LinkedIn</a>
-            </li>
-            <li>
-                <a href="https://t.me/levbereza">Telegram</a>
-            </li>
-        </ul>
-    </footer>
-</body>
-</html>
+<%- include('../includes/foot') %>
