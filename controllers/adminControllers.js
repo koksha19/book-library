@@ -28,7 +28,7 @@ const postCreateBook = async (req, res) => {
     const books = await Book.find();
 
     res.render("admin/admin-books", {
-      path: "/books",
+      path: "/admin/books",
       books: books,
     });
   } catch (err) {
