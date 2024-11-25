@@ -1,0 +1,19 @@
+<%- include('../includes/head') %>
+<%- include('../includes/navigation') %>
+<div class="books">
+    <% for (const book of books) { %>
+        <article class="book_item">
+            <div class="book">
+                <h1><%= book.title %></h1>
+                <h3><%= book.author %></h3>
+                <img src="<%= book.imageUrl %>" alt="A book">
+                <p><%= book.description %></p>
+                <form action="/admin/delete-book" method="post">
+                    <input type="hidden" value="<%= book._id %>" name="bookId">
+                    <button class="btn" type="submit" style="background: red">Delete</button>
+                </form>
+            </div>
+        </article>
+    <% } %>
+</div>
+<%- include('../includes/foot') %>

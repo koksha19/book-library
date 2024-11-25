@@ -11,7 +11,7 @@ const createBook = async (req, res) => {
       imageUrl: imageUrl,
       description: description,
     });
-    res.render("library/index", {
+    res.render("admin/admin-books", {
       admin: true,
       path: "/books",
       books: books,
@@ -23,9 +23,8 @@ const createBook = async (req, res) => {
 
 const getAdminBooks = async (req, res) => {
   const books = await Book.find();
-  res.render("library/index", {
-    admin: true,
-    path: "/books",
+  res.render("admin/admin-books", {
+    path: "/admin/books",
     books: books,
   });
 };
