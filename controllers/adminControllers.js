@@ -2,20 +2,24 @@ const Book = require("../models/Book");
 
 const getAdminBooks = async (req, res) => {
     const books = await Book.find();
-    res.render("admin/admin-books", {
+    return res.render("admin/admin-books", {
         path: "/admin/books",
         books: books,
     });
 };
 
 const getCreateBook = async (req, res) => {
-    res.render("admin/add-book", {
+    return res.render("admin/add-book", {
         path: "/admin/add-book",
     });
 }
 
 const postCreateBook = async (req, res) => {
-  const { title, author, imageUrl, description } = req.body;
+  const { title, author, description } = req.body;
+  const image = req.file;
+    console.log(image);
+  const imageUrl = image.path;
+    console.log(imageUrl)
 
   try {
     await Book.create({
@@ -24,13 +28,7 @@ const postCreateBook = async (req, res) => {
       imageUrl: imageUrl,
       description: description,
     });
-
-    const books = await Book.find();
-
-    res.render("admin/admin-books", {
-      path: "/admin/books",
-      books: books,
-    });
+    return res.status(201).redirect("/admin/books");
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
@@ -38,11 +36,9 @@ const postCreateBook = async (req, res) => {
 
 const deleteBook = async (req, res) => {
   const id = req.body.bookId;
-  console.log(id, req.body);
 
   Book.findById(id)
       .then((book) => {
-        console.log(book);
         if (!book) {
           return new Error('No product found');
         }
