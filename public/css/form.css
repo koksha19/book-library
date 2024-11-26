@@ -26,6 +26,11 @@
     font-size: 1rem;
 }
 
+.form div textarea {
+    height: 5rem;
+    font-size: 1rem;
+}
+
 input[type="file"] {
     margin-left: 2rem;
 }

@@ -15,22 +15,23 @@ const getCreateBook = async (req, res) => {
     title: null,
     author: null,
     description: null,
+    overview: null,
     errors: null,
   });
 };
 
 const postCreateBook = async (req, res) => {
-  const { title, author, description } = req.body;
+  const { title, author, description, overview } = req.body;
   const image = req.file;
-  console.log(image);
 
-  if (!title || !author || !description || !image) {
+  if (!title || !author || !description || !overview || !image) {
     req.flash("error", "Please, fill in all fields");
     return res.render("admin/add-book", {
       path: "/admin/add-book",
       title: title,
       author: author,
       description: description,
+      overview: overview,
       errors: req.flash("error"),
     });
   }
@@ -42,6 +43,7 @@ const postCreateBook = async (req, res) => {
       author: author,
       imageUrl: imageUrl,
       description: description,
+      overview: overview,
     });
     return res.status(201).redirect("/admin/books");
   } catch (err) {
@@ -49,10 +51,10 @@ const postCreateBook = async (req, res) => {
   }
 };
 
-const deleteBook = (req, res) => {
+const deleteBook = async (req, res) => {
   const id = req.body.bookId;
 
-  Book.findById(id)
+  await Book.findById(id)
     .then(async (book) => {
       if (!book) {
         return new Error("No product found");

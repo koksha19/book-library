@@ -1,0 +1,17 @@
+<%- include('../includes/head') %>
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/book-description.css">
+<%- include('../includes/navigation') %>
+    <div class="book_description">
+        <div class="book_inf">
+            <h1><%= book.title %></h1>
+            <h3><%= book.author %></h3>
+            <img src="<%= book.imageUrl %>" alt="A book">
+            <p><%= book.description %></p>
+            <form action="/">
+                <button class="btn" type="submit">Reserve</button>
+            </form>
+        </div>
+        <p id="overview"><%= book.overview %></p>
+    </div>
+<%- include('../includes/foot') %>

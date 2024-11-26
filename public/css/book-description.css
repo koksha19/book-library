@@ -1,0 +1,31 @@
+.book_description {
+    width: 70%;
+    height: 700px;
+    box-shadow: 5px 5px 5px 5px #656464;
+    text-align: center;
+    justify-self: center;
+    margin: 1rem;
+    display: flex;
+}
+
+.book_description #overview {
+    height: 50%;
+    width: 40%;
+    word-break: break-all;
+    margin: 2rem;
+    align-self: center;
+}
+
+.book_inf {
+    width: 50%;
+}
+
+.book_description .book_inf img {
+    width: 70%;
+    height: 70%;
+    object-fit: contain;
+}
+
+.book_description .book_inf h1, .book_description .book_inf h3, .book_description .book_inf p {
+    margin: 5px;
+}
