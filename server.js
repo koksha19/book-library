@@ -34,6 +34,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(multer({ storage: storage }).single("imageUrl"));
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/books", express.static(path.join(__dirname, "public")));
+app.use(
+  "/books/public/images",
+  express.static(path.join(__dirname, "public", "images")),
+);
 app.use(
   "/public/images",
   express.static(path.join(__dirname, "public", "images")),

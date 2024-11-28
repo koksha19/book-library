@@ -9,7 +9,7 @@
                     <h3><%= book.author %></h3>
                     <img src="<%= book.imageUrl %>" alt="A book">
                     <p><%= book.description %></p>
-                    <form action="/<%= book._id %>">
+                    <form action="/books/<%= book._id %>">
                         <button class="btn" type="submit">Description</button>
                     </form>
                     <form action="/">

@@ -12,10 +12,13 @@ const getAdminBooks = async (req, res) => {
 const getCreateBook = async (req, res) => {
   return res.render("admin/add-book", {
     path: "/admin/add-book",
-    title: null,
-    author: null,
-    description: null,
-    overview: null,
+    editing: false,
+    book: {
+      title: null,
+      author: null,
+      description: null,
+      overview: null,
+    },
     errors: null,
   });
 };
@@ -28,10 +31,13 @@ const postCreateBook = async (req, res) => {
     req.flash("error", "Please, fill in all fields");
     return res.render("admin/add-book", {
       path: "/admin/add-book",
-      title: title,
-      author: author,
-      description: description,
-      overview: overview,
+      editing: false,
+      book: {
+        title: title,
+        author: author,
+        description: description,
+        overview: overview,
+      },
       errors: req.flash("error"),
     });
   }
@@ -49,6 +55,70 @@ const postCreateBook = async (req, res) => {
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
+};
+
+const getEditBook = async (req, res) => {
+  const bookId = req.params.bookId;
+  console.log(bookId);
+
+  const book = await Book.findById(bookId).exec();
+
+  return res.render("admin/add-book", {
+    path: "/admin/edit-book",
+    editing: true,
+    book: book,
+    errors: null,
+  });
+};
+
+const postEditBook = async (req, res) => {
+  console.log(req.body);
+  const { title, author, description, overview, bookId } = req.body;
+  const image = req.file;
+
+  if (!title || !author || !description || !overview) {
+    req.flash("error", "Please, fill in all fields");
+    return res.render("admin/add-book", {
+      path: "/admin/add-book",
+      editing: true,
+      book: {
+        title: title,
+        author: author,
+        description: description,
+        overview: overview,
+      },
+      errors: req.flash("error"),
+    });
+  }
+
+  await Book.findById(bookId)
+    .then(async (book) => {
+      if (!book) {
+        return res.status(500).json({ message: "No such book" });
+      }
+      let imageUrl;
+      if (image) {
+        await fs.unlink(`./${book.imageUrl}`, (err) => {
+          if (err) console.error(err);
+          console.log("Deleted image");
+        });
+        imageUrl = image.path;
+      }
+      await Book.updateOne(
+        { _id: bookId },
+        {
+          title: title,
+          author: author,
+          description: description,
+          overview: overview,
+          imageUrl: imageUrl,
+        },
+      );
+      return res.status(201).redirect("/admin/books");
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+    });
 };
 
 const deleteBook = async (req, res) => {
@@ -73,4 +143,11 @@ const deleteBook = async (req, res) => {
     });
 };
 
-module.exports = { getAdminBooks, getCreateBook, postCreateBook, deleteBook };
+module.exports = {
+  getAdminBooks,
+  getCreateBook,
+  postCreateBook,
+  getEditBook,
+  postEditBook,
+  deleteBook,
+};
