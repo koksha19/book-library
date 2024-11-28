@@ -59,8 +59,6 @@ const postCreateBook = async (req, res) => {
 
 const getEditBook = async (req, res) => {
   const bookId = req.params.bookId;
-  console.log(bookId);
-
   const book = await Book.findById(bookId).exec();
 
   return res.render("admin/add-book", {
@@ -76,49 +74,44 @@ const postEditBook = async (req, res) => {
   const { title, author, description, overview, bookId } = req.body;
   const image = req.file;
 
+  const book = await Book.findById(bookId);
+
   if (!title || !author || !description || !overview) {
     req.flash("error", "Please, fill in all fields");
     return res.render("admin/add-book", {
-      path: "/admin/add-book",
+      path: "/admin/edit-book",
       editing: true,
-      book: {
-        title: title,
-        author: author,
-        description: description,
-        overview: overview,
-      },
+      book: book,
       errors: req.flash("error"),
     });
   }
 
-  await Book.findById(bookId)
-    .then(async (book) => {
-      if (!book) {
-        return res.status(500).json({ message: "No such book" });
-      }
-      let imageUrl;
-      if (image) {
-        await fs.unlink(`./${book.imageUrl}`, (err) => {
-          if (err) console.error(err);
-          console.log("Deleted image");
-        });
-        imageUrl = image.path;
-      }
-      await Book.updateOne(
-        { _id: bookId },
-        {
-          title: title,
-          author: author,
-          description: description,
-          overview: overview,
-          imageUrl: imageUrl,
-        },
-      );
-      return res.status(201).redirect("/admin/books");
-    })
-    .catch((err) => {
-      res.status(500).json({ message: err.message });
-    });
+  try {
+    if (!book) {
+      return res.status(500).json({ message: "No such book" });
+    }
+    let imageUrl;
+    if (image) {
+      await fs.unlink(`./${book.imageUrl}`, (err) => {
+        if (err) console.error(err);
+        console.log("Deleted image");
+      });
+      imageUrl = image.path;
+    }
+    book
+      .updateOne({
+        title: title,
+        author: author,
+        description: description,
+        overview: overview,
+        imageUrl: imageUrl,
+      })
+      .then(() => {
+        return res.status(201).redirect("/admin/books");
+      });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
 };
 
 const deleteBook = async (req, res) => {

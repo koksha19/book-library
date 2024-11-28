@@ -8,7 +8,7 @@ const getBooks = async (req, res) => {
   });
 };
 
-const getBook = async (req, res, next) => {
+const getBook = async (req, res) => {
   const bookId = req.params._id;
   if (bookId === "favicon.ico") return res.redirect("/");
   const book = await Book.findById(bookId).exec();
