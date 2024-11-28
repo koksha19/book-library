@@ -1,4 +1,4 @@
-.add_book {
+.form {
     margin: 2rem;
     box-shadow: 5px 5px 5px 5px #656464;
     width: 30%;
@@ -6,27 +6,27 @@
     justify-self: center;
 }
 
-.form * {
+.form_item * {
     margin: 0.5rem;
 }
 
-.form div {
+.form_item div {
     display: grid;
 }
 
-.form div label {
+.form_item div label {
     margin-left: 1rem;
     justify-self: start;
     font-weight: bold;
     font-size: 1.2rem;
 }
 
-.form div input {
+.form_item div input {
     height: 2rem;
     font-size: 1rem;
 }
 
-.form div textarea {
+.form_item div textarea {
     height: 5rem;
     font-size: 1rem;
 }

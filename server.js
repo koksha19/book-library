@@ -8,6 +8,7 @@ const session = require("express-session");
 const connectDb = require("./config/connectDb");
 const libraryRoutes = require("./routes/mainRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const authRoutes = require("./routes/authRoutes");
 const pageNotFound = require("./controllers/pageNotFound");
 
 const PORT = process.env.PORT || 3000;
@@ -32,7 +33,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(multer({ storage: storage }).single("imageUrl"));
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/books", express.static(path.join(__dirname, "public")));
 app.use(
   "/books/public/images",
   express.static(path.join(__dirname, "public", "images")),
@@ -52,6 +52,7 @@ app.use(
 app.use(flash());
 
 app.use(libraryRoutes);
+app.use(authRoutes);
 app.use("/admin", adminRoutes);
 app.use(pageNotFound);
 

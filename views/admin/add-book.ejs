@@ -5,7 +5,7 @@
 <div style="display: <%= errors ? "flex" : "none" %>" id="flash">
     <p><%= errors %></p>
 </div>
-<div class="add_book">
+<div class="form_item">
     <h1><%= editing ? "Edit book" : "Add new book" %></h1>
     <form class="form" action=<%= editing ? "/admin/edit-book" : "/admin/add-book" %> method="post" enctype="multipart/form-data">
         <div>
