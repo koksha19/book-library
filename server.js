@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const multer = require("multer");
 const flash = require("connect-flash");
 const session = require("express-session");
+const MongoDBStore = require("connect-mongodb-session")(session);
 const connectDb = require("./config/connectDb");
 const libraryRoutes = require("./routes/mainRoutes");
 const adminRoutes = require("./routes/adminRoutes");
@@ -29,6 +30,11 @@ const storage = multer.diskStorage({
   },
 });
 
+const store = new MongoDBStore({
+  uri: process.env.MONGODB_URI,
+  collection: "sessions",
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(multer({ storage: storage }).single("imageUrl"));
@@ -47,6 +53,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: { maxAge: 1000 * 60 * 60 },
+    store: store,
   }),
 );
 app.use(flash());

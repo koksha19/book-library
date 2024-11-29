@@ -9,31 +9,38 @@
                 </a>
             </li>
             <li>
-                <a class="<%=path === '/' ? 'active' : ''%>" href="/">Books</a>
+                <a class="link_item <%=path === '/' ? 'active' : ''%>" href="/">Books</a>
             </li>
             <li>
-                <a class="<%=path === '/cart' ? 'active' : ''%>" href="/cart">Cart</a>
+                <a class="link_item <%=path === '/cart' ? 'active' : ''%>" href="/cart">Cart</a>
             </li>
             <li>
-                <a class="<%=path === '/reserved' ? 'active' : ''%>" href="/reserved">Reserved books</a>
+                <a class="link_item <%=path === '/reserved' ? 'active' : ''%>" href="/reserved">Reserved books</a>
             </li>
-            <li>
-                <a class="<%=path === '/admin/add-book' ? 'active' : ''%>" href="/admin/add-book">Add book</a>
-            </li>
-            <li>
-                <a class="<%=path === '/admin/books' ? 'active' : ''%>" href="/admin/books">Admin books</a>
-            </li>
+            <% if (isAuthenticated) { %>
+                <li>
+                    <a class="link_item <%=path === '/admin/add-book' ? 'active' : ''%>" href="/admin/add-book">Add book</a>
+                </li>
+                <li>
+                    <a class="link_item <%=path === '/admin/books' ? 'active' : ''%>" href="/admin/books">Admin books</a>
+                </li>
+            <% } %>
         </ul>
         <ul class="auth_navigation">
+            <% if (!isAuthenticated) { %>
             <li>
-                <a class="<%=path === '/signup' ? 'active' : ''%>" href="/signup">Sign up</a>
+                <a class="link_item <%=path === '/signup' ? 'active' : ''%>" href="/signup">Sign up</a>
             </li>
             <li>
-                <a class="<%=path === '/login' ? 'active' : ''%>" href="/login">Login</a>
+                <a class="link_item <%=path === '/login' ? 'active' : ''%>" href="/login">Login</a>
             </li>
+            <% } else if (isAuthenticated) {%>
             <li>
-                <a class="<%=path === '/logout' ? 'active' : ''%>" href="/logout">Logout</a>
+                <form action="/logout" method="post">
+                    <button class="link_item" type="submit">Log out</button>
+                </form>
             </li>
+            <% } %>
         </ul>
     </nav>
 </header>

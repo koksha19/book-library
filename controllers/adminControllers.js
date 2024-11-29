@@ -6,6 +6,7 @@ const getAdminBooks = async (req, res) => {
   return res.render("admin/admin-books", {
     path: "/admin/books",
     books: books,
+    isAuthenticated: null,
   });
 };
 
@@ -20,6 +21,7 @@ const getCreateBook = async (req, res) => {
       overview: null,
     },
     errors: null,
+    isAuthenticated: null,
   });
 };
 
@@ -39,6 +41,7 @@ const postCreateBook = async (req, res) => {
         overview: overview,
       },
       errors: req.flash("error"),
+      isAuthenticated: null,
     });
   }
 
@@ -66,6 +69,7 @@ const getEditBook = async (req, res) => {
     editing: true,
     book: book,
     errors: null,
+    isAuthenticated: null,
   });
 };
 
@@ -83,6 +87,7 @@ const postEditBook = async (req, res) => {
       editing: true,
       book: book,
       errors: req.flash("error"),
+      isAuthenticated: null,
     });
   }
 

@@ -47,13 +47,16 @@ body {
     margin: 0 2rem 0 0;
 }
 
-a {
+.link_item {
     text-decoration: none;
     color: white;
+    font-family: inherit;
     font-size: 1.2rem;
+    background: none;
+    border: none;
 }
 
-a:hover {
+.link_item:hover {
     color: aqua;
 }
 

@@ -5,6 +5,7 @@ const getBooks = async (req, res) => {
   res.render("library/index", {
     path: "/",
     books: books,
+    isAuthenticated: null,
   });
 };
 
@@ -15,6 +16,7 @@ const getBook = async (req, res) => {
   res.render("library/book", {
     path: "/book",
     book: book,
+    isAuthenticated: null,
   });
 };
 
