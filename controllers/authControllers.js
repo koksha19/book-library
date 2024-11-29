@@ -1,9 +1,46 @@
+const Book = require("../models/Book");
+const User = require("../models/User");
+
 const getSignUp = (req, res) => {
   res.render("auth/signup", {
     path: "/signup",
     errors: null,
+    user: {
+      email: null,
+      password: null,
+      conf_password: null,
+    },
     isAuthenticated: null,
   });
+};
+
+const postSignUp = async (req, res) => {
+  const { email, password, conf_password } = req.body;
+
+  if (!email || !password || !conf_password || password !== conf_password) {
+    req.flash("error", "Please, fill in all fields");
+    return res.render("auth/signup", {
+      path: "/signup",
+      editing: false,
+      user: {
+        email: email,
+        password: password,
+        conf_password: conf_password,
+      },
+      errors: req.flash("error"),
+      isAuthenticated: null,
+    });
+  }
+
+  try {
+    await User.create({
+      email: email,
+      password: password,
+    });
+    return res.status(201).redirect("/");
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
 };
 
 const getLogIn = (req, res) => {
@@ -30,4 +67,4 @@ const postLogOut = (req, res) => {
   });
 };
 
-module.exports = { getSignUp, getLogIn, postLogIn, postLogOut };
+module.exports = { getSignUp, postSignUp, getLogIn, postLogIn, postLogOut };
