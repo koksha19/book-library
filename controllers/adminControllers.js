@@ -2,7 +2,7 @@ const fs = require("fs");
 const Book = require("../models/Book");
 
 const getAdminBooks = async (req, res) => {
-  const books = await Book.find();
+  const books = await Book.find({ userId: req.session.user._id });
   return res.render("admin/admin-books", {
     path: "/admin/books",
     books: books,
@@ -50,6 +50,7 @@ const postCreateBook = async (req, res) => {
       imageUrl: imageUrl,
       description: description,
       overview: overview,
+      userId: req.session.user._id,
     });
     return res.status(201).redirect("/admin/books");
   } catch (err) {
