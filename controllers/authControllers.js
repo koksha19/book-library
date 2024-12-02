@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 
 const getSignUp = (req, res) => {
+  const isLoggedIn = req.session.isLoggedIn;
   res.render("auth/signup", {
     path: "/signup",
     errors: null,
@@ -11,12 +12,13 @@ const getSignUp = (req, res) => {
       password: null,
       conf_password: null,
     },
-    isAuthenticated: null,
+    isAuthenticated: isLoggedIn,
   });
 };
 
 const postSignUp = async (req, res) => {
   const { email, password, conf_password } = req.body;
+  const isLoggedIn = req.session.isLoggedIn;
 
   if (!email || !password || !conf_password || password !== conf_password) {
     req.flash("error", "Please, fill in all fields");
@@ -29,7 +31,7 @@ const postSignUp = async (req, res) => {
         conf_password: conf_password,
       },
       errors: req.flash("error"),
-      isAuthenticated: null,
+      isAuthenticated: isLoggedIn,
     });
   }
 
@@ -55,9 +57,32 @@ const getLogIn = (req, res) => {
   });
 };
 
-const postLogIn = (req, res) => {
-  req.session.isLoggedIn = true;
-  res.redirect("/");
+const postLogIn = async (req, res) => {
+  const { email, password } = req.body;
+  const isLoggedIn = req.session.isLoggedIn;
+
+  if (!email || !password) {
+    req.flash("error", "Please, fill in all fields");
+    return res.render("auth/login", {
+      path: "/login",
+      isAuthenticated: isLoggedIn,
+      errors: req.flash("error"),
+    });
+  }
+
+  try {
+    const user = await User.findOne({ email: email }).exec();
+    if (!user) return res.status(401).json({ error: "User not found" });
+    const match = await bcrypt.compare(password, user.password);
+    if (match) {
+      req.session.isLoggedIn = true;
+      res.redirect("/");
+    } else {
+      res.status(401).json({ message: "Invalid email or password" });
+    }
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
 };
 
 const postLogOut = (req, res) => {

@@ -10,6 +10,11 @@
     margin: 0.5rem;
 }
 
+.form_item h1 {
+    text-align: center;
+    margin: 1rem;
+}
+
 .form_item div {
     display: grid;
 }
