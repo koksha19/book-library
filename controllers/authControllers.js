@@ -1,4 +1,5 @@
-const Book = require("../models/Book");
+const bcrypt = require("bcrypt");
+
 const User = require("../models/User");
 
 const getSignUp = (req, res) => {
@@ -33,9 +34,10 @@ const postSignUp = async (req, res) => {
   }
 
   try {
+    const hashedPassword = await bcrypt.hash(password, 10);
     await User.create({
       email: email,
-      password: password,
+      password: hashedPassword,
     });
     return res.status(201).redirect("/");
   } catch (err) {
