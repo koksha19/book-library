@@ -1,4 +1,9 @@
 const bcrypt = require("bcrypt");
+const Mailjet = require("node-mailjet");
+const mailjet = Mailjet.apiConnect(
+  process.env.MJ_APIKEY_PUBLIC,
+  process.env.MJ_APIKEY_PRIVATE,
+);
 
 const User = require("../models/User");
 
@@ -37,6 +42,36 @@ const postSignUp = async (req, res) => {
       email: email,
       password: hashedPassword,
     });
+
+    const request = mailjet.post("send", { version: "v3.1" }).request({
+      Messages: [
+        {
+          From: {
+            Email: "lev.bereza@gmail.com",
+            Name: "MyLibrary administrator",
+          },
+          To: [
+            {
+              Email: email,
+            },
+          ],
+          Subject: "Account successfully created!",
+          TextPart:
+            "Dear user, we wanted to inform you that you have successfully created a new account on MyLibrary.",
+          HTMLPart:
+            '<h3>Dear user, welcome to <a href="http://localhost:3000/">MyLibrary</a>!</h3><br />',
+        },
+      ],
+    });
+
+    request
+      .then((result) => {
+        console.log(result.body);
+      })
+      .catch((err) => {
+        console.log(err.statusCode);
+      });
+
     return res.status(201).redirect("/");
   } catch (err) {
     return res.status(500).json({ message: err.message });
