@@ -6,6 +6,7 @@ const multer = require("multer");
 const flash = require("connect-flash");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
+const csrf = require("csurf");
 const connectDb = require("./config/connectDb");
 const libraryRoutes = require("./routes/mainRoutes");
 const adminRoutes = require("./routes/adminRoutes");
@@ -35,6 +36,8 @@ const store = new MongoDBStore({
   collection: "sessions",
 });
 
+const csrfProtection = csrf();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(multer({ storage: storage }).single("imageUrl"));
@@ -57,6 +60,13 @@ app.use(
   }),
 );
 app.use(flash());
+app.use(csrfProtection);
+
+app.use((req, res, next) => {
+  res.locals.csrfToken = req.csrfToken();
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  next();
+});
 
 app.use(libraryRoutes);
 app.use(authRoutes);

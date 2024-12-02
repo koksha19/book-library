@@ -2,17 +2,14 @@ const fs = require("fs");
 const Book = require("../models/Book");
 
 const getAdminBooks = async (req, res) => {
-  const isLoggedIn = req.session.isLoggedIn;
   const books = await Book.find();
   return res.render("admin/admin-books", {
     path: "/admin/books",
     books: books,
-    isAuthenticated: isLoggedIn,
   });
 };
 
 const getCreateBook = async (req, res) => {
-  const isLoggedIn = req.session.isLoggedIn;
   return res.render("admin/add-book", {
     path: "/admin/add-book",
     editing: false,
@@ -23,14 +20,12 @@ const getCreateBook = async (req, res) => {
       overview: null,
     },
     errors: null,
-    isAuthenticated: isLoggedIn,
   });
 };
 
 const postCreateBook = async (req, res) => {
   const { title, author, description, overview } = req.body;
   const image = req.file;
-  const isLoggedIn = req.session.isLoggedIn;
 
   if (!title || !author || !description || !overview || !image) {
     req.flash("error", "Please, fill in all fields");
@@ -44,7 +39,6 @@ const postCreateBook = async (req, res) => {
         overview: overview,
       },
       errors: req.flash("error"),
-      isAuthenticated: isLoggedIn,
     });
   }
 
@@ -64,7 +58,6 @@ const postCreateBook = async (req, res) => {
 };
 
 const getEditBook = async (req, res) => {
-  const isLoggedIn = req.session.isLoggedIn;
   const bookId = req.params.bookId;
   const book = await Book.findById(bookId).exec();
 
@@ -73,7 +66,6 @@ const getEditBook = async (req, res) => {
     editing: true,
     book: book,
     errors: null,
-    isAuthenticated: isLoggedIn,
   });
 };
 
@@ -81,7 +73,6 @@ const postEditBook = async (req, res) => {
   console.log(req.body);
   const { title, author, description, overview, bookId } = req.body;
   const image = req.file;
-  const isLoggedIn = req.session.isLoggedIn;
 
   const book = await Book.findById(bookId);
   if (!book) {
@@ -95,7 +86,6 @@ const postEditBook = async (req, res) => {
       editing: true,
       book: book,
       errors: req.flash("error"),
-      isAuthenticated: isLoggedIn,
     });
   }
 

@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 
 const getSignUp = (req, res) => {
-  const isLoggedIn = req.session.isLoggedIn;
   res.render("auth/signup", {
     path: "/signup",
     errors: null,
@@ -12,13 +11,11 @@ const getSignUp = (req, res) => {
       password: null,
       conf_password: null,
     },
-    isAuthenticated: isLoggedIn,
   });
 };
 
 const postSignUp = async (req, res) => {
   const { email, password, conf_password } = req.body;
-  const isLoggedIn = req.session.isLoggedIn;
 
   if (!email || !password || !conf_password || password !== conf_password) {
     req.flash("error", "Please, fill in all fields");
@@ -31,7 +28,6 @@ const postSignUp = async (req, res) => {
         conf_password: conf_password,
       },
       errors: req.flash("error"),
-      isAuthenticated: isLoggedIn,
     });
   }
 
@@ -48,24 +44,19 @@ const postSignUp = async (req, res) => {
 };
 
 const getLogIn = (req, res) => {
-  const isLoggedIn = req.session.isLoggedIn;
-  console.log(req.session, isLoggedIn);
   res.render("auth/login", {
     path: "/login",
     errors: null,
-    isAuthenticated: isLoggedIn,
   });
 };
 
 const postLogIn = async (req, res) => {
   const { email, password } = req.body;
-  const isLoggedIn = req.session.isLoggedIn;
 
   if (!email || !password) {
     req.flash("error", "Please, fill in all fields");
     return res.render("auth/login", {
       path: "/login",
-      isAuthenticated: isLoggedIn,
       errors: req.flash("error"),
     });
   }

@@ -37,6 +37,7 @@
             <% } else if (isAuthenticated) {%>
             <li>
                 <form action="/logout" method="post">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button class="link_item" type="submit">Log out</button>
                 </form>
             </li>

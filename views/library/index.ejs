@@ -10,9 +10,11 @@
                     <img src="<%= book.imageUrl %>" alt="A book">
                     <p><%= book.description %></p>
                     <form action="/books/<%= book._id %>">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                         <button class="btn" type="submit">Description</button>
                     </form>
-                    <form action="/">
+                    <form action="/" method="post">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                         <button class="btn" type="submit">Reserve</button>
                     </form>
                 </div>
