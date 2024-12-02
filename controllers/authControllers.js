@@ -76,6 +76,7 @@ const postLogIn = async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
     if (match) {
       req.session.isLoggedIn = true;
+      req.session.user = user;
       res.redirect("/");
     } else {
       res.status(401).json({ message: "Invalid email or password" });

@@ -84,6 +84,9 @@ const postEditBook = async (req, res) => {
   const isLoggedIn = req.session.isLoggedIn;
 
   const book = await Book.findById(bookId);
+  if (!book) {
+    return res.status(500).json({ message: "No such book" });
+  }
 
   if (!title || !author || !description || !overview) {
     req.flash("error", "Please, fill in all fields");
@@ -97,9 +100,6 @@ const postEditBook = async (req, res) => {
   }
 
   try {
-    if (!book) {
-      return res.status(500).json({ message: "No such book" });
-    }
     let imageUrl;
     if (image) {
       await fs.unlink(`./${book.imageUrl}`, (err) => {
