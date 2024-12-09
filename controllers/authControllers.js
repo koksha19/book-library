@@ -1,5 +1,7 @@
 const bcrypt = require("bcrypt");
 const Mailjet = require("node-mailjet");
+const crypto = require("crypto");
+
 const mailjet = Mailjet.apiConnect(
   process.env.MJ_APIKEY_PUBLIC,
   process.env.MJ_APIKEY_PRIVATE,
@@ -121,4 +123,144 @@ const postLogOut = (req, res) => {
   });
 };
 
-module.exports = { getSignUp, postSignUp, getLogIn, postLogIn, postLogOut };
+const getResetPassword = (req, res) => {
+  res.render("auth/reset-password", {
+    path: "/reset",
+    errors: null,
+  });
+};
+
+const postResetPassword = async (req, res) => {
+  const email = req.body.email;
+
+  const user = await User.findOne({ email: email });
+
+  if (!user) {
+    res.redirect("/reset-password");
+  }
+
+  try {
+    const token = crypto.randomBytes(32).toString("hex");
+    await user.updateOne({
+      token: token,
+      tokenExpirationDate: Date.now() + 1000 * 60 * 5,
+    });
+
+    console.log(token);
+
+    const request = mailjet.post("send", { version: "v3.1" }).request({
+      Messages: [
+        {
+          From: {
+            Email: "lev.bereza@gmail.com",
+            Name: "MyLibrary administrator",
+          },
+          To: [
+            {
+              Email: email,
+            },
+          ],
+          Subject: "Reset password request",
+          TextPart: "Dear user, we received a request to change password",
+          HTMLPart: `<h3>Click <a href="http://localhost:3000/new-password/${token}">this link</a> to reset your password!</h3><br />`,
+        },
+      ],
+    });
+
+    request
+      .then(() => {
+        res.redirect("/");
+      })
+      .catch((err) => {
+        console.log(err.statusCode);
+      });
+  } catch (err) {
+    res.status(500).json({ message: "Resetting password failed" });
+  }
+};
+
+const getNewPassword = async (req, res) => {
+  const token = req.params.token;
+  const user = await User.findOne({
+    token: token,
+    tokenExpirationDate: {
+      $gt: Date.now(),
+    },
+  });
+
+  if (!user) {
+    return res.redirect("/reset-password");
+  }
+
+  console.log(user.email, user.token);
+
+  res.render("auth/new-password", {
+    path: "/new-password",
+    errors: null,
+    email: user.email,
+    token: user.token,
+    tokenExpirationDate: user.tokenExpirationDate,
+  });
+};
+
+const postNewPassword = async (req, res) => {
+  const { password, conf_password, email, token, tokenExpirationDate } =
+    req.body;
+
+  if (!password || !conf_password) {
+    req.flash("error", "Please, fill in all fields");
+    return res.render("auth/new-password", {
+      path: "/new-password",
+      errors: req.flash("error"),
+      email: email,
+      token: token,
+      tokenExpirationDate: tokenExpirationDate,
+    });
+  }
+
+  const user = await User.findOne({
+    email: email,
+    token: token,
+    tokenExpirationDate: {
+      $gt: Date.now(),
+    },
+  });
+
+  try {
+    if (password !== conf_password) {
+      req.flash("error", "Passwords don't match");
+      return res.render("auth/new-password", {
+        path: "/new-password",
+        errors: req.flash("error"),
+        email: email,
+        token: token,
+        tokenExpirationDate: tokenExpirationDate,
+      });
+    }
+
+    const newPassword = await bcrypt.hash(password, 10);
+
+    await user.updateOne({
+      password: newPassword,
+      token: null,
+      tokenExpirationDate: null,
+    });
+    return res.redirect("/");
+  } catch (err) {
+    res.status(500).json({ message: "Can't change password" });
+  }
+
+  console.log(user);
+};
+
+module.exports = {
+  getSignUp,
+  postSignUp,
+  getLogIn,
+  postLogIn,
+  postLogOut,
+  getResetPassword,
+  postResetPassword,
+  getNewPassword,
+  postNewPassword,
+};

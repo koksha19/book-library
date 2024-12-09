@@ -11,6 +11,12 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  token: {
+    type: String,
+  },
+  tokenExpirationDate: {
+    type: Date,
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);
