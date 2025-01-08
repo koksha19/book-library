@@ -10,13 +10,12 @@
                 <img src="/<%= book.imageUrl %>" alt="A book">
                 <p><%= book.description %></p>
                 <a href="/admin/edit-book/<%= book._id %>" class="btn">Edit</a>
-                <form action="/admin/delete-book" method="post">
-                    <input type="hidden" value="<%= book._id %>" name="bookId">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                    <button class="btn" type="submit" style="background: red">Delete</button>
-                </form>
+                <input type="hidden" value="<%= book._id %>" name="bookId">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button class="btn" type="submit" style="background: red" onclick="deleteBook(this)">Delete</button>
             </div>
         </article>
     <% } %>
 </div>
 <%- include('../includes/foot') %>
+<script src="/js/admin.js"></script>

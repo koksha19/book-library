@@ -116,7 +116,7 @@ const postEditBook = async (req, res) => {
 };
 
 const deleteBook = async (req, res) => {
-  const id = req.body.bookId;
+  const id = req.params.bookId;
 
   await Book.findById(id)
     .then(async (book) => {
@@ -129,8 +129,10 @@ const deleteBook = async (req, res) => {
       });
       return Book.deleteOne({ _id: id });
     })
-    .then(() => {
-      res.redirect("/admin/books");
+    .then((book) => {
+      res
+        .status(200)
+        .json({ message: "Book deleted successfully", data: book });
     })
     .catch((err) => {
       return res.status(500).json({ message: err.message });

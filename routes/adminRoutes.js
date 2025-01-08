@@ -10,6 +10,6 @@ router.get("/add-book", isAuthenticated, adminControllers.getCreateBook);
 router.post("/add-book", isAuthenticated, adminControllers.postCreateBook);
 router.get("/edit-book/:bookId", isAuthenticated, adminControllers.getEditBook);
 router.post("/edit-book", isAuthenticated, adminControllers.postEditBook);
-router.post("/delete-book", isAuthenticated, adminControllers.deleteBook);
+router.delete("/books/:bookId", isAuthenticated, adminControllers.deleteBook);
 
 module.exports = router;
