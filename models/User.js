@@ -17,6 +17,21 @@ const userSchema = new Schema({
   tokenExpirationDate: {
     type: Date,
   },
+  cart: {
+    items: [
+      {
+        bookId: {
+          type: Schema.Types.ObjectId,
+          ref: "Book",
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);
