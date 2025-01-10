@@ -49,4 +49,15 @@ userSchema.methods.addToCart = function (book) {
   return this.save();
 };
 
+userSchema.methods.removeFromCart = function (book) {
+  const id = book._id;
+
+  const bookIndex = this.cart.items.findIndex(
+    (item) => item.bookId.toString() === id.toString(),
+  );
+
+  if (bookIndex >= -1) this.cart.items.splice(bookIndex, 1);
+  return this.save();
+};
+
 module.exports = mongoose.model("User", userSchema);

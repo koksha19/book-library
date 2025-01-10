@@ -23,7 +23,6 @@ const getCart = async (req, res) => {
     .populate("cart.items.bookId")
     .then((user) => {
       const items = user.cart.items;
-      console.log("result:", items);
       res.render("library/cart", {
         path: "/cart",
         items: items,
@@ -46,4 +45,17 @@ const postCart = (req, res) => {
     });
 };
 
-module.exports = { getBooks, getBook, getCart, postCart };
+const deleteCart = (req, res) => {
+  const bookId = req.body.bookId;
+
+  Book.findById(bookId)
+    .then((book) => {
+      return req.user.removeFromCart(book);
+    })
+    .then((result) => {
+      console.log(result);
+      res.redirect("/cart");
+    });
+};
+
+module.exports = { getBooks, getBook, getCart, postCart, deleteCart };

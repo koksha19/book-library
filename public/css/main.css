@@ -115,8 +115,10 @@ body {
 }
 
 .cart_item {
+    display: flex;
     margin: 2rem;
     padding: 0.5rem;
     box-shadow: 5px 5px 5px 5px #656464;
     width: 100vh;
+    justify-content: space-between;
 }

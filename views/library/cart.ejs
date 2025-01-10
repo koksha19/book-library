@@ -8,7 +8,12 @@
         <% for (const item of items) { %>
                 <div class="cart_item">
                     <h2><%= item.bookId.title %></h2>
-                    <p>Quantity: <%= item.quantity %></p>
+                    <h2>Quantity: <%= item.quantity %></h2>
+                    <form action="/delete-cart-item" method="POST">
+                        <input type="hidden" value="<%= item.bookId._id %>" name="bookId">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button class="btn" type="submit">Delete</button>
+                    </form>
                 </div>
         <% } %>
             <form action="/reserve" method="post">
