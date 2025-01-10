@@ -34,4 +34,19 @@ const userSchema = new Schema({
   },
 });
 
+userSchema.methods.addToCart = function (book) {
+  const id = book._id;
+  const bookIndex = this.cart.items.findIndex(
+    (item) => item.bookId.toString() === id.toString(),
+  );
+
+  if (bookIndex >= 0) {
+    this.cart.items[bookIndex].quantity++;
+  } else {
+    this.cart.items.push({ bookId: id, quantity: 1 });
+  }
+
+  return this.save();
+};
+
 module.exports = mongoose.model("User", userSchema);

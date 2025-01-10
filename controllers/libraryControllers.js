@@ -18,4 +18,22 @@ const getBook = async (req, res) => {
   });
 };
 
-module.exports = { getBooks, getBook };
+const getCart = async (req, res) => {
+  res.render("library/cart", {
+    path: "/cart",
+  });
+};
+
+const postCart = (req, res) => {
+  const bookId = req.body.bookId;
+  Book.findById(bookId)
+    .then((book) => {
+      return req.user.addToCart(book);
+    })
+    .then((result) => {
+      console.log(result);
+      res.redirect("/cart");
+    });
+};
+
+module.exports = { getBooks, getBook, getCart, postCart };

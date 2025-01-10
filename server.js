@@ -12,6 +12,7 @@ const libraryRoutes = require("./routes/mainRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const authRoutes = require("./routes/authRoutes");
 const pageNotFound = require("./controllers/pageNotFound");
+const User = require("./models/User");
 
 const PORT = process.env.PORT || 3000;
 
@@ -62,7 +63,13 @@ app.use(
 app.use(flash());
 app.use(csrfProtection);
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
+  if (req.session.user) {
+    const user = await User.findById(req.session.user._id).exec();
+    if (user) {
+      req.user = user;
+    }
+  }
   res.locals.csrfToken = req.csrfToken();
   res.locals.isAuthenticated = req.session.isLoggedIn;
   next();
