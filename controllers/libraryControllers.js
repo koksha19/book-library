@@ -19,9 +19,19 @@ const getBook = async (req, res) => {
 };
 
 const getCart = async (req, res) => {
-  res.render("library/cart", {
-    path: "/cart",
-  });
+  req.user
+    .populate("cart.items.bookId")
+    .then((user) => {
+      const items = user.cart.items;
+      console.log("result:", items);
+      res.render("library/cart", {
+        path: "/cart",
+        items: items,
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 };
 
 const postCart = (req, res) => {

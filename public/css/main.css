@@ -108,3 +108,15 @@ body {
     color: white;
     cursor: pointer;
 }
+
+.cart {
+    display: grid;
+    justify-items: center;
+}
+
+.cart_item {
+    margin: 2rem;
+    padding: 0.5rem;
+    box-shadow: 5px 5px 5px 5px #656464;
+    width: 100vh;
+}

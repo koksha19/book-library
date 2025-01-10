@@ -2,5 +2,19 @@
 <link rel="stylesheet" href="/css/main.css">
 <%- include('../includes/navigation') %>
 <div class="cart">
+    <% if (items.length <= 0) { %>
+        <h1>No products in cart!</h1>
+    <% } else { %>
+        <% for (const item of items) { %>
+                <div class="cart_item">
+                    <h2><%= item.bookId.title %></h2>
+                    <p>Quantity: <%= item.quantity %></p>
+                </div>
+        <% } %>
+            <form action="/reserve" method="post">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button class="btn" type="submit">Reserve</button>
+            </form>
+    <% } %>
 </div>
 <%- include('../includes/foot') %>
