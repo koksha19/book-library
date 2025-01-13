@@ -10,19 +10,39 @@
     <form class="form" action=<%= editing ? "/admin/edit-book" : "/admin/add-book" %> method="post" enctype="multipart/form-data">
         <div>
             <label for="title">Title</label>
-            <input type="text" id="title" name="title" value="<%= book.title %>">
+            <input
+                    class="<%= validationErrors.find(error => error.path === 'title') ? "invalid" : "" %>"
+                    type="text"
+                    id="title"
+                    name="title"
+                    value="<%= book.title %>">
         </div>
         <div>
             <label for="author">Author</label>
-            <input type="text" id="author" name="author" value="<%= book.author %>">
+            <input
+                    class="<%= validationErrors.find(error => error.path === 'author') ? "invalid" : "" %>"
+                    type="text"
+                    id="author"
+                    name="author"
+                    value="<%= book.author %>">
         </div>
         <div>
             <label for="description">Description</label>
-            <input type="text" id="description" name="description" value="<%= book.description %>">
+            <input
+                    class="<%= validationErrors.find(error => error.path === 'description') ? "invalid" : "" %>"
+                    type="text"
+                    id="description"
+                    name="description"
+                    value="<%= book.description %>">
         </div>
         <div>
             <label for="overview">Overview</label>
-            <textarea name="overview" id="overview" cols="30" rows="10"><%= book.overview %></textarea>
+            <textarea
+                    class="<%= validationErrors.find(error => error.path === 'overview') ? "invalid" : "" %>"
+                    name="overview"
+                    id="overview"
+                    cols="30"
+                    rows="10"><%= book.overview %></textarea>
         </div>
         <div>
             <label for="imageUrl">Image</label>

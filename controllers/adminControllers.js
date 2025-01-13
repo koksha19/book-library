@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { validationResult } = require("express-validator");
 const Book = require("../models/Book");
 
 const getAdminBooks = async (req, res) => {
@@ -20,12 +21,29 @@ const getCreateBook = async (req, res) => {
       overview: null,
     },
     errors: null,
+    validationErrors: [],
   });
 };
 
 const postCreateBook = async (req, res) => {
   const { title, author, description, overview } = req.body;
   const image = req.file;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render("admin/add-book", {
+      path: "/admin/add-book",
+      editing: false,
+      book: {
+        title: title,
+        author: author,
+        description: description,
+        overview: overview,
+      },
+      errors: errors.array()[0].msg,
+      validationErrors: errors.array(),
+    });
+  }
 
   if (!title || !author || !description || !overview || !image) {
     req.flash("error", "Please, fill in all fields");
@@ -67,6 +85,7 @@ const getEditBook = async (req, res) => {
     editing: true,
     book: book,
     errors: null,
+    validationErrors: [],
   });
 };
 
@@ -75,9 +94,21 @@ const postEditBook = async (req, res) => {
   const { title, author, description, overview, bookId } = req.body;
   const image = req.file;
 
+  const errors = validationResult(req);
+
   const book = await Book.findById(bookId);
   if (!book) {
     return res.status(500).json({ message: "No such book" });
+  }
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render("admin/add-book", {
+      path: "/admin/edit-book",
+      editing: true,
+      book: book,
+      errors: errors.array()[0].msg,
+      validationErrors: errors.array(),
+    });
   }
 
   if (!title || !author || !description || !overview) {
