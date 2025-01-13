@@ -125,7 +125,10 @@ const postLogIn = async (req, res) => {
       req.session.user = user;
       res.redirect("/");
     } else {
-      res.status(401).json({ message: "Invalid email or password" });
+      res.status(401).render("auth/login", {
+        path: "/login",
+        errors: "Incorrect password",
+      });
     }
   } catch (err) {
     return res.status(500).json({ message: err.message });
