@@ -19,6 +19,7 @@ const getSignUp = (req, res) => {
       password: null,
       conf_password: null,
     },
+    validationErrors: [],
   });
 };
 
@@ -28,7 +29,7 @@ const postSignUp = async (req, res) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    console.log(errors);
+    console.log(errors.array());
     return res.status(422).render("auth/signup", {
       path: "/signup",
       errors: errors.array()[0].msg,
@@ -37,6 +38,7 @@ const postSignUp = async (req, res) => {
         password: password,
         conf_password: conf_password,
       },
+      validationErrors: errors.array(),
     });
   }
 

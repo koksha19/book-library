@@ -10,15 +10,30 @@
     <form class="form_item" action="/signup" method="post" enctype="multipart/form-data">
         <div>
             <label for="email">EMail</label>
-            <input type="text" id="email" name="email" value="<%= user.email %>">
+            <input
+                    class="<%= validationErrors.find(error => error.path === 'email') ? "invalid" : "" %>"
+                    type="text"
+                    id="email"
+                    name="email"
+                    value="<%= user.email %>">
         </div>
         <div>
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" value="<%= user.password %>">
+            <input
+                    class="<%= validationErrors.find(error => error.path === 'password') ? "invalid" : "" %>"
+                    type="password"
+                    id="password"
+                    name="password"
+                    value="<%= user.password %>">
         </div>
         <div>
             <label for="conf_password">Confirm password</label>
-            <input type="password" id="conf_password" name="conf_password" value="<%= user.conf_password %>">
+            <input
+                    class="<%= validationErrors.find(error => error.path === 'conf_password') ? "invalid" : "" %>"
+                    type="password"
+                    id="conf_password"
+                    name="conf_password"
+                    value="<%= user.conf_password %>">
         </div>
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         <button class="btn" type="submit">Create account</button>

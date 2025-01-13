@@ -53,3 +53,7 @@ input[type="file"] {
     display: none;
     justify-content: center;
 }
+
+.invalid {
+    border: 1px solid red;
+}
