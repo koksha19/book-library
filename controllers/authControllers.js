@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const Mailjet = require("node-mailjet");
+const { validationResult } = require("express-validator");
 const crypto = require("crypto");
 
 const mailjet = Mailjet.apiConnect(
@@ -23,6 +24,21 @@ const getSignUp = (req, res) => {
 
 const postSignUp = async (req, res) => {
   const { email, password, conf_password } = req.body;
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    console.log(errors);
+    return res.status(422).render("auth/signup", {
+      path: "/signup",
+      errors: errors.array()[0].msg,
+      user: {
+        email: email,
+        password: password,
+        conf_password: conf_password,
+      },
+    });
+  }
 
   if (!email || !password || !conf_password || password !== conf_password) {
     req.flash("error", "Please, fill in all fields");
