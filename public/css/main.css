@@ -22,6 +22,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 2rem;
 }
 
 .navigation {
@@ -110,6 +111,7 @@ body {
 }
 
 .cart {
+    margin: 0 2rem 5rem 2rem;
     display: grid;
     justify-items: center;
 }
@@ -121,4 +123,12 @@ body {
     box-shadow: 5px 5px 5px 5px #656464;
     width: 100vh;
     justify-content: space-between;
+}
+
+.reserved {
+    display: grid;
+    justify-items: center;
+    margin: 2rem;
+    padding: 0.5rem;
+    box-shadow: 5px 5px 5px 5px #656464;
 }
