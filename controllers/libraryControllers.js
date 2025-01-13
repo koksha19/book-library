@@ -29,8 +29,8 @@ const getCart = async (req, res) => {
         items: items,
       });
     })
-    .catch((err) => {
-      console.error(err);
+    .catch(() => {
+      res.status(500).json({ message: "Can't get cart" });
     });
 };
 
@@ -43,6 +43,9 @@ const postCart = (req, res) => {
     .then((result) => {
       console.log(result);
       res.redirect("/cart");
+    })
+    .catch(() => {
+      res.status(500).json({ message: "Can't post to cart" });
     });
 };
 
@@ -56,6 +59,9 @@ const deleteCart = (req, res) => {
     .then((result) => {
       console.log(result);
       res.redirect("/cart");
+    })
+    .catch(() => {
+      res.status(500).json({ message: "Can't delete item from cart" });
     });
 };
 
@@ -63,7 +69,7 @@ const getOrders = async (req, res) => {
   const orders = await Order.find({
     "user.userId": req.user._id,
   });
-  const titles = res.render("library/reserved", {
+  res.render("library/reserved", {
     path: "/reserved",
     orders: orders,
   });
@@ -90,6 +96,9 @@ const postOrder = (req, res) => {
     .then(() => {
       req.user.clearCart();
       res.redirect("/reserved");
+    })
+    .catch(() => {
+      res.status(500).json({ message: "Can't reserve books" });
     });
 };
 
