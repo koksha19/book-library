@@ -3,6 +3,8 @@ const Mailjet = require("node-mailjet");
 const { validationResult } = require("express-validator");
 const crypto = require("crypto");
 
+const mongoose = require("mongoose");
+
 const mailjet = Mailjet.apiConnect(
   process.env.MJ_APIKEY_PUBLIC,
   process.env.MJ_APIKEY_PRIVATE,
@@ -23,7 +25,7 @@ const getSignUp = (req, res) => {
   });
 };
 
-const postSignUp = async (req, res) => {
+const postSignUp = async (req, res, next) => {
   const { email, password, conf_password } = req.body;
 
   const errors = validationResult(req);
@@ -94,7 +96,9 @@ const postSignUp = async (req, res) => {
 
     return res.status(201).redirect("/");
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    return next(error);
   }
 };
 
@@ -105,7 +109,7 @@ const getLogIn = (req, res) => {
   });
 };
 
-const postLogIn = async (req, res) => {
+const postLogIn = async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -131,7 +135,9 @@ const postLogIn = async (req, res) => {
       });
     }
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    return next(error);
   }
 };
 
@@ -151,7 +157,7 @@ const getResetPassword = (req, res) => {
   });
 };
 
-const postResetPassword = async (req, res) => {
+const postResetPassword = async (req, res, next) => {
   const email = req.body.email;
 
   const user = await User.findOne({ email: email });
@@ -196,7 +202,9 @@ const postResetPassword = async (req, res) => {
         console.log(err.statusCode);
       });
   } catch (err) {
-    res.status(500).json({ message: "Resetting password failed" });
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    return next(error);
   }
 };
 
@@ -224,7 +232,7 @@ const getNewPassword = async (req, res) => {
   });
 };
 
-const postNewPassword = async (req, res) => {
+const postNewPassword = async (req, res, next) => {
   const { password, conf_password, email, token, tokenExpirationDate } =
     req.body;
 
@@ -268,10 +276,10 @@ const postNewPassword = async (req, res) => {
     });
     return res.redirect("/");
   } catch (err) {
-    res.status(500).json({ message: "Can't change password" });
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    return next(error);
   }
-
-  console.log(user);
 };
 
 module.exports = {

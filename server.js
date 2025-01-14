@@ -11,7 +11,7 @@ const connectDb = require("./config/connectDb");
 const libraryRoutes = require("./routes/mainRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const authRoutes = require("./routes/authRoutes");
-const pageNotFound = require("./controllers/pageNotFound");
+const errors = require("./controllers/errors");
 const User = require("./models/User");
 
 const PORT = process.env.PORT || 3000;
@@ -78,7 +78,12 @@ app.use(async (req, res, next) => {
 app.use(libraryRoutes);
 app.use(authRoutes);
 app.use("/admin", adminRoutes);
-app.use(pageNotFound);
+app.get("/500", errors.serverError);
+app.use(errors.pageNotFound);
+
+app.use((err, req, res, next) => {
+  return res.redirect("/500");
+});
 
 mongoose.connection.once("open", () => {
   console.log("Connected to the database");

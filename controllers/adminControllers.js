@@ -2,6 +2,8 @@ const fs = require("fs");
 const { validationResult } = require("express-validator");
 const Book = require("../models/Book");
 
+const mongoose = require("mongoose");
+
 const getAdminBooks = async (req, res) => {
   const books = await Book.find({ userId: req.session.user._id });
   return res.render("admin/admin-books", {
@@ -25,7 +27,7 @@ const getCreateBook = async (req, res) => {
   });
 };
 
-const postCreateBook = async (req, res) => {
+const postCreateBook = async (req, res, next) => {
   const { title, author, description, overview } = req.body;
   const image = req.file;
   const errors = validationResult(req);
@@ -72,7 +74,9 @@ const postCreateBook = async (req, res) => {
     });
     return res.status(201).redirect("/admin/books");
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    return next(error);
   }
 };
 
@@ -89,8 +93,9 @@ const getEditBook = async (req, res) => {
   });
 };
 
-const postEditBook = async (req, res) => {
+const postEditBook = async (req, res, next) => {
   console.log(req.body);
+  let imageUrl;
   const { title, author, description, overview, bookId } = req.body;
   const image = req.file;
 
@@ -121,32 +126,32 @@ const postEditBook = async (req, res) => {
     });
   }
 
-  try {
-    let imageUrl;
-    if (image) {
-      await fs.unlink(`./${book.imageUrl}`, (err) => {
-        if (err) console.error(err);
-        console.log("Deleted image");
-      });
-      imageUrl = image.path;
-    }
-    book
-      .updateOne({
-        title: title,
-        author: author,
-        description: description,
-        overview: overview,
-        imageUrl: imageUrl,
-      })
-      .then(() => {
-        return res.status(201).redirect("/admin/books");
-      });
-  } catch (err) {
-    return res.status(500).json({ message: err.message });
+  if (image) {
+    await fs.unlink(`./${book.imageUrl}`, (err) => {
+      if (err) console.error(err);
+      console.log("Deleted image");
+    });
+    imageUrl = image.path;
   }
+  book
+    .updateOne({
+      title: title,
+      author: author,
+      description: description,
+      overview: overview,
+      imageUrl: imageUrl,
+    })
+    .then(() => {
+      return res.status(201).redirect("/admin/books");
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
-const deleteBook = async (req, res) => {
+const deleteBook = async (req, res, next) => {
   const id = req.params.bookId;
 
   await Book.findById(id)
@@ -166,7 +171,9 @@ const deleteBook = async (req, res) => {
         .json({ message: "Book deleted successfully", data: book });
     })
     .catch((err) => {
-      return res.status(500).json({ message: err.message });
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
