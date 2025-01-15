@@ -1,3 +1,8 @@
+const fs = require("fs");
+const path = require("path");
+
+const PDFDocument = require("pdfkit");
+
 const Book = require("../models/Book");
 const Order = require("../models/Order");
 
@@ -102,6 +107,53 @@ const postOrder = (req, res) => {
     });
 };
 
+const getInvoice = (req, res, next) => {
+  const orderId = req.params.orderId;
+
+  Order.findById(orderId)
+    .then((order) => {
+      if (!order) {
+        return next(new Error("No such order"));
+      }
+      if (order.user.userId.toString() !== req.user._id.toString()) {
+        return next(new Error("Unauthorized"));
+      }
+
+      const fileName = `invoice-${orderId}.pdf`;
+      const filePath = path.join("data", "invoices", fileName);
+
+      const PDFDoc = new PDFDocument();
+
+      PDFDoc.pipe(fs.createWriteStream(filePath));
+      PDFDoc.pipe(res);
+
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Content-Disposition", "inline");
+
+      PDFDoc.fontSize(27).text(`Invoice-${orderId}`, {
+        underline: true,
+      });
+      PDFDoc.fontSize(16).text(
+        "---------------------------------------------------------------------------------------",
+      );
+      PDFDoc.text("Reserved books:");
+      order.books.forEach((book) => {
+        PDFDoc.text("       • " + book.book.title + ": " + book.quantity);
+      });
+      PDFDoc.text(
+        "---------------------------------------------------------------------------------------",
+      );
+      PDFDoc.fontSize(22).text("Your order is being processed by our team.");
+      PDFDoc.fontSize(22).text("It will be ready until 18 PM today.");
+      PDFDoc.end();
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
+};
+
 module.exports = {
   getBooks,
   getBook,
@@ -110,4 +162,5 @@ module.exports = {
   deleteCart,
   getOrders,
   postOrder,
+  getInvoice,
 };

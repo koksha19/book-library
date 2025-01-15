@@ -7,14 +7,14 @@
     <% } else { %>
         <% for (const order of orders) { %>
             <div class="reserved">
-                <h2>Order <%= order._id %></h2>
+                <h2>Order <%= order._id %> - <a href="/reserved/<%= order._id %>">Invoice</a></h2>
                 <% for (const book of order.books) { %>
                     <div class="cart_item">
                         <h3><%= book.book.title %></h3>
                         <h3>Quantity: <%= book.quantity %></h3>
                     </div>
                 <% } %>
-            </div>
+            </div>s
         <% } %>
     <% } %>
 </div>

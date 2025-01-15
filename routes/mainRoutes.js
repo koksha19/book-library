@@ -12,5 +12,6 @@ router.post("/cart", isAuthenticated, booksController.postCart);
 router.post("/delete-cart-item", isAuthenticated, booksController.deleteCart);
 router.get("/reserved", isAuthenticated, booksController.getOrders);
 router.post("/reserved", isAuthenticated, booksController.postOrder);
+router.get("/reserved/:orderId", isAuthenticated, booksController.getInvoice);
 
 module.exports = router;
