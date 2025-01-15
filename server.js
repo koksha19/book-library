@@ -82,7 +82,10 @@ app.get("/500", errors.serverError);
 app.use(errors.pageNotFound);
 
 app.use((err, req, res, next) => {
-  return res.redirect("/500");
+  return res.render("500", {
+    path: "/500",
+    error: err.message,
+  });
 });
 
 mongoose.connection.once("open", () => {

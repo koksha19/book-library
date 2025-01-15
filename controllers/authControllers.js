@@ -96,7 +96,7 @@ const postSignUp = async (req, res, next) => {
 
     return res.status(201).redirect("/");
   } catch (err) {
-    const error = new Error(err);
+    const error = new Error("Server side error");
     error.httpStatusCode = 500;
     return next(error);
   }
@@ -135,7 +135,7 @@ const postLogIn = async (req, res, next) => {
       });
     }
   } catch (err) {
-    const error = new Error(err);
+    const error = new Error("Server side error");
     error.httpStatusCode = 500;
     return next(error);
   }
@@ -202,7 +202,7 @@ const postResetPassword = async (req, res, next) => {
         console.log(err.statusCode);
       });
   } catch (err) {
-    const error = new Error(err);
+    const error = new Error("Server side error");
     error.httpStatusCode = 500;
     return next(error);
   }
@@ -276,7 +276,7 @@ const postNewPassword = async (req, res, next) => {
     });
     return res.redirect("/");
   } catch (err) {
-    const error = new Error(err);
+    const error = new Error("Server side error");
     error.httpStatusCode = 500;
     return next(error);
   }

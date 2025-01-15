@@ -2,8 +2,6 @@ const fs = require("fs");
 const { validationResult } = require("express-validator");
 const Book = require("../models/Book");
 
-const mongoose = require("mongoose");
-
 const getAdminBooks = async (req, res) => {
   const books = await Book.find({ userId: req.session.user._id });
   return res.render("admin/admin-books", {
@@ -74,7 +72,7 @@ const postCreateBook = async (req, res, next) => {
     });
     return res.status(201).redirect("/admin/books");
   } catch (err) {
-    const error = new Error(err);
+    const error = new Error("Server side error");
     error.httpStatusCode = 500;
     return next(error);
   }
@@ -145,7 +143,7 @@ const postEditBook = async (req, res, next) => {
       return res.status(201).redirect("/admin/books");
     })
     .catch((err) => {
-      const error = new Error(err);
+      const error = new Error("Server side error");
       error.httpStatusCode = 500;
       return next(error);
     });
@@ -171,7 +169,7 @@ const deleteBook = async (req, res, next) => {
         .json({ message: "Book deleted successfully", data: book });
     })
     .catch((err) => {
-      const error = new Error(err);
+      const error = new Error("Server side error");
       error.httpStatusCode = 500;
       return next(error);
     });
