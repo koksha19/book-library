@@ -6,10 +6,16 @@ const PDFDocument = require("pdfkit");
 const Book = require("../models/Book");
 const Order = require("../models/Order");
 
+const ITEMS_PER_PAGE = 2;
+
 const getBooks = async (req, res) => {
-  const books = await Book.find();
+  const page = req.query.page;
+  const books = await Book.find()
+    .skip((page - 1) * ITEMS_PER_PAGE)
+    .limit(ITEMS_PER_PAGE);
   res.render("library/index", {
     path: "/",
+    page: page || "1",
     books: books,
   });
 };
