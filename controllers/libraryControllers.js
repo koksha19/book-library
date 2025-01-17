@@ -12,16 +12,16 @@ const getBooks = async (req, res) => {
   const page = req.query.page || "1";
 
   Book.countDocuments().then(async (bookNumber) => {
-    console.log(bookNumber, page);
-    console.log(`has prev ${+page > 1}`);
-    console.log(`has next ${+page * ITEMS_PER_PAGE < bookNumber}`);
     const books = await Book.find()
       .skip((page - 1) * ITEMS_PER_PAGE)
       .limit(ITEMS_PER_PAGE);
     res.render("library/index", {
       path: "/",
+      isAdmin: false,
       page: page,
       books: books,
+      prevPage: +page - 1,
+      nextPage: +page + 1,
       hasPrevPage: +page > 1,
       hasNextPage: +page * ITEMS_PER_PAGE < bookNumber,
       lastPage: Math.ceil(bookNumber / ITEMS_PER_PAGE),

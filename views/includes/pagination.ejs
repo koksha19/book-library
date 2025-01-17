@@ -1,0 +1,15 @@
+<section class="pagination">
+    <% if (page > 1) { %>
+        <a <%if (isAdmin) { %>href="/admin/books/?page=1" <%} else { %> href="/?page=1"<% } %>>Start</a>
+    <% } %>
+    <% if (hasPrevPage) {%>
+        <a <%if (isAdmin) { %>href="/admin/books/?page=<%= prevPage %>" <% } else { %> href="/?page=<%= prevPage %>"<% } %>><<</a>
+    <% } %>
+    <a class="active" <%if (isAdmin) { %>href="/admin/books/?page=<%= page %>" <%} else { %> href="/?page=<%= page %>"<% } %>><%= page %></a>
+    <% if (hasNextPage) { %>
+        <a <%if (isAdmin) { %>href="/admin/books/?page=<%= nextPage %>" <%} else { %> href="/?page=<%= nextPage %>" <% } %>>>></a>
+    <% } %>
+    <%if (page < lastPage) {%>
+        <a <%if (isAdmin) { %>href="/admin/books/?page=<%= lastPage %>" <%} else { %> href="/?page=<%= lastPage %>"<% } %>>Last</a>
+    <% } %>
+</section>

@@ -18,11 +18,15 @@
             </article>
         <% } %>
     </div>
-    <section class="pagination">
-        <a class="<%= page === "1" ? 'active' : '' %>" href="/admin/books/?page=1" >1</a>
-        <a class="<%= page === "2" ? 'active' : '' %>" href="/admin/books/?page=2">2</a>
-        <a class="<%= page === "3" ? 'active' : '' %>" href="/admin/books/?page=3">3</a>
-    </section>
+    <%- include('../includes/pagination.ejs', {
+        isAdmin: isAdmin,
+        page: page,
+        prevPage: prevPage,
+        nextPage: nextPage,
+        hasPrevPage: hasPrevPage,
+        hasNextPage: hasNextPage,
+        lastPage: lastPage,
+    }) %>
 </main>
 <%- include('../includes/foot') %>
 <script src="/js/admin.js"></script>

@@ -23,20 +23,14 @@
             </article>
         <% } %>
     </div>
-    <section class="pagination">
-        <% if (page > 1) { %>
-            <a href="/?page=1">Start</a>
-        <% } %>
-        <% if (hasPrevPage) {%>
-            <a href="/?page=<%= +page - 1 %>"><<</a>
-        <% } %>
-        <a class="active" href="/?page=<%= +page %>"><%= page %></a>
-        <% if (hasNextPage) { %>
-            <a href="/?page=<%= +page + 1 %>">>></a>
-        <% } %>
-        <%if (page < lastPage) {%>
-            <a href="/?page=<%= lastPage %>">Last</a>
-        <% } %>
-    </section>
+    <%- include('../includes/pagination.ejs', {
+        isAdmin: isAdmin,
+        page: page,
+        prevPage: prevPage,
+        nextPage: nextPage,
+        hasPrevPage: hasPrevPage,
+        hasNextPage: hasNextPage,
+        lastPage: lastPage,
+    }) %>
 </main>
 <%- include('../includes/foot') %>
