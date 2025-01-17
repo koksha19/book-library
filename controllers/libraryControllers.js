@@ -9,13 +9,13 @@ const Order = require("../models/Order");
 const ITEMS_PER_PAGE = 2;
 
 const getBooks = async (req, res) => {
-  const page = req.query.page;
+  const page = req.query.page || "1";
   const books = await Book.find()
     .skip((page - 1) * ITEMS_PER_PAGE)
     .limit(ITEMS_PER_PAGE);
   res.render("library/index", {
     path: "/",
-    page: page || "1",
+    page: page,
     books: books,
   });
 };

@@ -2,10 +2,16 @@ const fs = require("fs");
 const { validationResult } = require("express-validator");
 const Book = require("../models/Book");
 
+const ITEMS_PER_PAGE = 1;
+
 const getAdminBooks = async (req, res) => {
-  const books = await Book.find({ userId: req.session.user._id });
+  const page = req.query.page || "1";
+  const books = await Book.find({ userId: req.session.user._id })
+    .skip((page - 1) * ITEMS_PER_PAGE)
+    .limit(ITEMS_PER_PAGE);
   return res.render("admin/admin-books", {
     path: "/admin/books",
+    page: page,
     books: books,
   });
 };
