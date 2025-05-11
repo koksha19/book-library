@@ -10,11 +10,13 @@ authentication and authorization, database operations, Docker practices.
 
 At first, clone this repo by running this command:
 
-```git clone https://github.com/koksha19/book-library.git```
+``` bash
+git clone https://github.com/koksha19/book-library.git
+```
 
 Create .env file in the root folder of the project:
 
-```
+``` 
 PORT=3000
 MONGODB_URI=...your mongo uri...
 SESSION_SECRET=...your secret...
@@ -26,11 +28,15 @@ MJ_APIKEY_PRIVATE=...your private mailjet key...
 
 Navigate to the project's folder and run:
 
-```npm install```
+``` bash
+npm install
+```
 
 Launch the application:
 
-```npm run start```
+``` bash
+npm run start
+```
 
 Now open ```http://localhost:3000```
 
@@ -38,7 +44,9 @@ Now open ```http://localhost:3000```
 
 Run this command to launch in container:
 
-```docker compose up```
+```bash
+docker compose up
+```
 
 Open ```http://localhost:3000```
 

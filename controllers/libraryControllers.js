@@ -6,7 +6,7 @@ const PDFDocument = require("pdfkit");
 const Book = require("../models/Book");
 const Order = require("../models/Order");
 
-const ITEMS_PER_PAGE = 1;
+const ITEMS_PER_PAGE = 3;
 
 const getBooks = async (req, res) => {
   const page = req.query.page || "1";
